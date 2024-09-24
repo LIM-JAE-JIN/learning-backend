@@ -1,0 +1,52 @@
+show databases;
+
+use myproject;
+
+show tables;
+
+desc product;
+
+select * from product;
+
+# MYSQL에서는 큰따옴표("")와 작은따옴표('')가 큰 차이가 없으나, 다른 SQL DB는 대부분 작은따옴표('')를 사용
+insert into product (id, name, description, price) values(uuid(), '키보드', '클래키 빌드에 적합한 커스텀 키보드', 169000);
+
+delete from product where name = '키보드';
+
+update product set price = 189000 where name = '키보드';
+
+
+# join
+
+select * from product_saleslocation;
+
+insert into product_saleslocation (id, address, addressDetail, lat, lng, meetingTime) 
+	values(uuid(), '구로구', '구로디지털단지', 37.281723, 112.3342, '2024-09-24');
+
+update product set productSaleslocationId = '6c8c6761-7a1b-11ef-bc65-c84d44290ff4' 
+	where id = '83ee772d-7a1a-11ef-bc65-c84d44290ff4';
+
+select p.id, p.name, p.price, ps.address, ps.addressDetail as '상세주소'
+	from product p, product_saleslocation ps
+	where p.productSaleslocationId = ps.id;
+
+# 추가 조건
+update product
+	set isSoldout = true 
+	where name = '키보드'
+	and price = 189000;
+
+update product
+	set isSoldout = true 
+	where name = '키보드'
+	or price = 189000;
+
+# 주석 쉽게 다는법
+# update/delete에서는 사용 X
+select *
+	from product p
+	where 1=1
+	and name = '키보드'
+	and price = 18900
+	and isSoldout = false
+
