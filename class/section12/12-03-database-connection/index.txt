@@ -1,0 +1,19 @@
+show databases;
+
+use myproject;
+
+show tables;
+
+show variables;
+
+# 커넥션 최대값 변경
+set global max_connections = 151;
+
+# 현재 연결된 상태
+show status;
+
+# 현재 연결된 커넥션 목록
+show processlist;
+
+# 커넥션 끊기
+kill #id
