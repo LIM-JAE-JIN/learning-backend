@@ -7,12 +7,14 @@ import { ProductsSaleslocationsService } from '../productsSaleslocations/product
 import { ProductSaleslocation } from '../productsSaleslocations/entities/productsSaleslocation.entity';
 import { ProductsTagsService } from '../productsTags/productsTags.service';
 import { ProductTag } from '../productsTags/entities/productsTag.entity';
+import { ProductSubscriber } from './entities/product.subscriber';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([Product, ProductSaleslocation, ProductTag]),
   ],
   providers: [
+    ProductSubscriber,
     ProductsResolver,
     ProductsService,
     ProductsSaleslocationsService,
