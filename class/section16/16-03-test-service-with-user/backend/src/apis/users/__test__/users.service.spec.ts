@@ -1,7 +1,10 @@
 import { Test } from '@nestjs/testing';
 import { UsersService } from '../users.service';
 import { getRepositoryToken, TypeOrmModule } from '@nestjs/typeorm';
-import { ConflictException } from '@nestjs/common';
+import {
+  ConflictException,
+  UnprocessableEntityException,
+} from '@nestjs/common';
 import { User } from '../entities/user.entity';
 
 // 나만의 데이터베이스 만들기
@@ -82,6 +85,22 @@ describe('UsersService', () => {
         name: '철수',
         age: 13,
       });
+    });
+
+    // TDD => 테스트코드를 먼저 만들기
+    it('이메일 길이가 초과 됐을 때 검증', async () => {
+      const myData = {
+        email: 'bbkjhkjhdaskjdhasdkjhakhjhjdb@bbb.com',
+        password: '1234',
+        name: '철수',
+        age: 13,
+      };
+
+      try {
+        await usersService.create({ ...myData });
+      } catch (error) {
+        expect(error).toBeInstanceOf(UnprocessableEntityException);
+      }
     });
   });
 });
