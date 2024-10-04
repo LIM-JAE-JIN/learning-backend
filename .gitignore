@@ -1,6 +1,5 @@
 node_modules
 
-.env
-.env.docker
+.env*
 
 gcp-file-storage.json
