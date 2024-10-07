@@ -5,7 +5,7 @@ services:
 
   # 컴퓨터이름
   backend:
-    image: asia.gcr.io/linear-reporter-437203-g8/backend-project-nestjs:0.3
+    image: asia.gcr.io/linear-reporter-437203-g8/backend-project-nestjs:0.6
     build:
       context: .
       dockerfile: Dockerfile.prod
@@ -20,7 +20,7 @@ services:
   # database:
   #   # platform: linux/86_64
   #   image: mysql:latest
-  #   environment:
+  #   environment: 
   #     MYSQL_DATABASE: "mydocker"
   #     MYSQL_ROOT_PASSWORD: "root"
   #   ports:

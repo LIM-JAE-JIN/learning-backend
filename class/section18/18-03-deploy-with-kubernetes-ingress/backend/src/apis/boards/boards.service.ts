@@ -11,19 +11,19 @@ export class BoardsService {
     // 1. DB에 접속 후, 데이터를 조회 => 데이터를 조회했다고 가정
     const result = [
       {
-        number: 1,
+        number: 100,
         writer: '철수',
         title: '제목입니다',
         contents: '내용입니다만',
       },
       {
-        number: 2,
+        number: 200,
         writer: '영희',
         title: '영희입니다',
         contents: '영희입니다만',
       },
       {
-        number: 3,
+        number: 300,
         writer: '훈이',
         title: '훈이입니다',
         contents: '훈이입니다만',
