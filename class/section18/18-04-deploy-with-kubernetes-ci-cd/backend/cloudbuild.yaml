@@ -1,0 +1,25 @@
+steps:
+  #  1. docker-compose -f docker-compose.prod.yaml build
+  - name: docker/compose:1.29.0
+    args:
+      - -f
+      - class/section18/18-04-deploy-with-kubernetes-ci-cd/backend/docker-compose.prod.yaml
+      - build
+
+    # 2. docker-compose -f docker-compose.prod.yaml push
+  - name: docker/compose:1.29.0
+    args:
+      - -f
+      - class/section18/18-04-deploy-with-kubernetes-ci-cd/backend/docker-compose.prod.yaml
+      - push
+
+    # 3. kubectl set image deployment/backend-project-nestjs backend-project-nestjs-sha256-1=asia.gcr.io/linear-reporter-437203-g8/backend-project-nestjs:version
+  - name: gcr.io/colud-builders/kubectl
+    args:
+      - set
+      - image
+      - deployment/backend-project-nestjs
+      - backend-project-nestjs-sha256-1=asia.gcr.io/linear-reporter-437203-g8/backend-project-nestjs:0.7
+    env:
+      - CLOUDSDK_COMPUTE_ZONE=asia-northeast3
+      - CLOUDSDK_CONTAINER_CLUSTER-autopilot-cluster-1
