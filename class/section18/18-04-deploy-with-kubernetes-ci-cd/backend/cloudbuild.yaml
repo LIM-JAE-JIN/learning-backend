@@ -1,6 +1,6 @@
 serviceAccount: "400104978064@cloudbuild.gserviceaccount.com"
 options:
-  logging: CLOUD_LOGGING_ONLY
+  logging: CLOUD_LOGGING_ONLY 
 steps:
   #  1. docker-compose -f docker-compose.prod.yaml build
   - name: docker/compose:1.29.0
