@@ -15,7 +15,7 @@ steps:
 
     # 3. kubectl set image deployment/backend-project-nestjs 
     #    backend-project-nestjs-sha256-1
-    #    =asia.gcr.io/linear-reporter-437203-g8/backend-project-nestjs:version  
+    #    =asia.gcr.io/linear-reporter-437203-g8/backend-project-nestjs:version
   - name: gcr.io/colud-builders/kubectl
     args:
       - set
