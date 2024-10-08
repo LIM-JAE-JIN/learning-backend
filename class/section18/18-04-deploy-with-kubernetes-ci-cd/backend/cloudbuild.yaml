@@ -1,4 +1,4 @@
-serviceAccount: "400104978064@cloudbuild.gserviceaccount.com"
+serviceAccount: "400104978064-compute@developer.gserviceaccount.com"
 options:
   logging: CLOUD_LOGGING_ONLY 
 steps:
