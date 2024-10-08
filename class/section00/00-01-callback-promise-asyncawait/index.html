@@ -1,0 +1,104 @@
+<!-- `http://numbersapi.com/random?min=1&max=200` -->
+<!-- `https://koreanjson.com/posts/${num}` -->
+<!-- `https://koreanjson.com/posts?userId=${userId}` -->
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <title>콜백과 친구들</title>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script>
+    // function addEventListener(aaa, bbb) {
+    //   // 세팅된 API 주소로 요청
+    //   const res = 197 // 세팅된 API 주소로 부터 받아온 결과
+    //   if(aaa === 'load') {
+    //     bbb(res);
+    //   }
+    // }
+
+    // 콜백 지옥
+    const myCallback = () => {
+      const aa = new XMLHttpRequest();
+      aa.open('get', `http://numbersapi.com/random?min=1&max=200`);
+      aa.send();
+      aa.addEventListener('load', (res)=> {
+        console.log(res) // API 요청 결과
+        const num = res.target.response.split(" ")[0] // random number
+
+        const bb = new XMLHttpRequest();
+        bb.open('get', `https://koreanjson.com/posts/${num}`);
+        bb.send();
+        bb.addEventListener('load', (res) => {
+          console.log(res) // API 요청 결과
+          const userId = JSON.parse(res.target.response).UserId;
+  
+          const cc = new XMLHttpRequest();
+          cc.open('get', `https://koreanjson.com/posts?userId=${userId}`);
+          cc.send();
+          cc.addEventListener('load', (res) => {
+            console.log(res); // 최종 API 요청 결과
+          });
+        });
+      });
+    }
+
+
+    // new Promise((resolve, reject)=> {
+    //   try {
+    //     // 여기서 API 요청을 한다면?
+    //     const res = "철수" // 백엔드에서 "철수" 데이터 받아옴
+    //     resolve(res);
+    //   } catch(error) {
+    //     reject(error);
+    //   }
+    // })
+    // .then((res)=> {
+    //   console.log(res) // 철수
+    // })
+    // .catch((err)=> {
+    //   console.log(err) // 실패
+    // })
+
+    // const axios= {
+    //   get: new Promise((resolve, reject) => {
+
+    //   })
+    // }
+
+    // 프로미스 체이닝
+    const myPromise = () => {
+      console.log('1번째 실행');
+      axios
+      .get(`http://numbersapi.com/random?min=1&max=200`)
+      .then(res => {
+          console.log('2번째 실행');
+          return axios.get(`https://koreanjson.com/posts/${num}`);
+        })
+        .then(res => {
+          console.log('3번째 실행');
+          return axios.get(`https://koreanjson.com/posts?userId=${userId}`);
+        })
+        .then(res => {
+          console.log('4번째 실행');
+          // res 최종 결과
+        })
+        console.log('5번째 실행'); // 1 -> 5 -> 2 -> 3 -> 4 => 실행 순서 예측하기 어려움 (이벤트루프)
+    }
+
+    // axios, fetch 등 => 대표적인 Promise(.then, .catch 등의 기능)를 지원하는 기능
+    // axios, fetch 등을 기다리는 2가지 방법
+    // 1. .then() 활용
+    // 2. await 활용 => promise(비동기)인 경우만 async,await 사용할 수 있음
+    const myAsyncAwait = async () => {
+      await axios.get(`http://numbersapi.com/random?min=1&max=200`);
+      await axios.get(`https://koreanjson.com/posts/${num}`);
+      await axios.get(`https://koreanjson.com/posts?userId=${userId}`);
+    }
+  </script>
+</head>
+<body>
+  <button onclick="myCallback()">callback</button>
+  <button onclick="myPromise()">promise</button>
+  <button onclick="myAsyncAwait()">asyncawait</button>
+</body>
+</html>
