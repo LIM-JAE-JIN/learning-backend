@@ -13,7 +13,9 @@ steps:
       - class/section18/18-04-deploy-with-kubernetes-ci-cd/backend/docker-compose.prod.yaml
       - push
 
-    # 3. kubectl set image deployment/backend-project-nestjs backend-project-nestjs-sha256-1=asia.gcr.io/linear-reporter-437203-g8/backend-project-nestjs:version
+    # 3. kubectl set image deployment/backend-project-nestjs 
+    #    backend-project-nestjs-sha256-1
+    #    =asia.gcr.io/linear-reporter-437203-g8/backend-project-nestjs:version
   - name: gcr.io/colud-builders/kubectl
     args:
       - set
