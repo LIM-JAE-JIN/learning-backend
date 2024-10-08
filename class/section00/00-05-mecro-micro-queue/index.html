@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>eventloop</title>
+  <script>
+    const onClickLoop = () => {
+      console.log('start!');
+
+      // 비동기작업(매크로큐에 들어감)
+      setTimeout(()=> {
+        
+        // 비동기작업(마이크로큐에 들어감)
+        new Promise((resolve) => resolve("철수")).then(() => {
+          console.log("저는 Promise setTimeout에서 실행");
+        });
+
+        console.log('저는 setTimeout 매크로큐 0초 뒤 실행');
+      }, 0)
+
+      // 비동기작업(마이크로큐에 들어감)
+      new Promise((resolve) => resolve("철수")).then(() => {
+        console.log("저는 Promise(1) 마이크로큐 0초 뒤 실행");
+      });
+
+      // 비동기작업(매크로큐에 들어감)
+      setInterval(()=> {
+        console.log('저는 setInterval 매크로큐 0초마다 실행')
+      }, 0)
+
+      let sum = 0;
+      for (let i =0; i <=9000000000; i++) {
+        sum += i;
+      }
+
+      // 비동기작업(마이크로큐에 들어감)
+      new Promise((resolve) => resolve("철수")).then(() => {
+        console.log("저는 Promise(2) 마이크로큐 0초 뒤 실행");
+      });
+
+      console.log('end!');
+    }
+  </script>
+</head>
+<body>
+  <button onclick="onClickLoop()">시작하기</button>
+</body>
+</html>
