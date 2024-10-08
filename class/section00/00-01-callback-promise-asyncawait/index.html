@@ -90,9 +90,15 @@
     // 1. .then() 활용
     // 2. await 활용 => promise(비동기)인 경우만 async,await 사용할 수 있음
     const myAsyncAwait = async () => {
-      await axios.get(`http://numbersapi.com/random?min=1&max=200`);
-      await axios.get(`https://koreanjson.com/posts/${num}`);
-      await axios.get(`https://koreanjson.com/posts?userId=${userId}`);
+      const aa = await axios.get(`http://numbersapi.com/random?min=1&max=200`);
+      const num = aa.data.split(" ")[0];
+      console.log(num);
+      const bb = await axios.get(`https://koreanjson.com/posts/${num}`);
+      const userId = bb.data.id;
+      console.log(userId);
+      const cc = await axios.get(`https://koreanjson.com/posts?userId=${userId}`);
+      const result  = cc.data;
+      console.log(result);
     }
   </script>
 </head>
