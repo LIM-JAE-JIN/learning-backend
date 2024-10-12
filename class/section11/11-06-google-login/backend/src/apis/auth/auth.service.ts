@@ -4,6 +4,7 @@ import * as bcrypt from 'bcrypt';
 import {
   IAuthGetAccessToken,
   IAuthServiceLogin,
+  IAuthServiceLoginOAuth,
   IAuthServiceRestoreAccessToken,
   IAuthServiceSetRefreshToken,
 } from './interfaces/auth-service.interface';
@@ -67,5 +68,32 @@ export class AuthService {
     // 5. 일치하는 유저도 있고, 비밀번호도 맞으면
     //    => accessToken(JWT) 브라우저에 전달
     return this.getAccessToken({ user });
+  }
+
+  async loginOAuth({ req, res }: IAuthServiceLoginOAuth) {
+    // 1. 회원조회
+    let user = await this.usersService.findOneByEmail({
+      email: req.user.email,
+    });
+    // 2. 회원가입이 안되어 있을 시, 회원가입 진행
+    if (!user)
+      user = await this.usersService.create({
+        ...req.user,
+        // name: req.user.name,
+        // email: req.user.email,
+        // password: req.user.password,
+        // age: req.user.age
+      });
+    // 3. 회원가입이 돼있을 시 (refreshToken, accessToken 브라우저 전송)
+    this.setRefreshToken({
+      user,
+      context: {
+        res,
+        req: null,
+      },
+    });
+    res.redirect(
+      'http://localhost:5500/class/section11/11-06-google-login/frontend/social-login.html',
+    );
   }
 }
