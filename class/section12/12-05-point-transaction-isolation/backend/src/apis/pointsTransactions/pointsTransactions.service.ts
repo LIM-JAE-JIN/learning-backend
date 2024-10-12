@@ -1,13 +1,17 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { ConflictException, Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DataSource, Repository } from 'typeorm';
 import {
   POINT_TRANSACTION_STATUS_ENUM,
   PointTransaction,
 } from './entities/pointTransaction.entity';
-import { IPointsTransactionsServiceCreate } from './interfaces/points-transactions-service.interface';
+import {
+  IPointsTransactionsServiceCheckDuplication,
+  IPointsTransactionsServiceCreate,
+  IPointsTransactionsServiceFindOneImpUid,
+} from './interfaces/points-transactions-service.interface';
 import { User } from '../users/entities/user.entity';
-
+import { IamportService } from '../iamport/iamport.service';
 @Injectable()
 export class PointsTransactionsService {
   constructor(
@@ -16,13 +20,33 @@ export class PointsTransactionsService {
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
     private readonly dataSource: DataSource,
+    private readonly iamportService: IamportService,
   ) {}
+
+  findOneByImpUid({
+    impUid,
+  }: IPointsTransactionsServiceFindOneImpUid): Promise<PointTransaction> {
+    return this.pointsTransactionsRepository.findOne({ where: { impUid } });
+  }
+
+  async checkDuplication({
+    impUid,
+  }: IPointsTransactionsServiceCheckDuplication): Promise<void> {
+    const result = await this.findOneByImpUid({ impUid });
+    if (result) throw new ConflictException('이미 등록된 결제 아이디입니다.');
+  }
 
   async create({
     impUid,
     amount,
     user: _user,
   }: IPointsTransactionsServiceCreate): Promise<PointTransaction | void> {
+    // 결제완료 상태인지 검증
+    await this.iamportService.checkPaid({ impUid, amount });
+
+    // 이미 결제됐던 id인지 검증
+    this.checkDuplication({ impUid });
+
     const queryRunner = this.dataSource.createQueryRunner();
     await queryRunner.connect();
     await queryRunner.startTransaction('SERIALIZABLE');
