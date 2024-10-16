@@ -25,6 +25,11 @@ import { PaymentsMoudle } from './apis/payments/payments.module';
       driver: ApolloDriver,
       autoSchemaFile: 'src/commons/graphql/schema.gql',
       context: ({ req, res }) => ({ req, res }), // req는 기본적으로 들어오지만, res는 이걸 작성해야 들어옴
+      formatError: (error) => {
+        console.log('error response');
+        console.log(error);
+        return error;
+      },
     }),
     TypeOrmModule.forRoot({
       type: process.env.DATABASE_TYPE as 'mysql',
