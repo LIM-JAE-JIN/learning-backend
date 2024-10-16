@@ -89,6 +89,7 @@ type Mutation {
   createUser(email: String!, password: String!, name: String!, age: Int!): User!
   createBoard(createBoardInput: CreateBoardInput!): String!
   createPointTransaction(impUid: String!, amount: Int!): PointTransaction!
+  cancelPointTransaction(impUid: String!): PointTransaction!
   createProduct(createProductInput: CreateProductInput!): Product!
   updateProduct(productId: String!, updateProductInput: UpdateProductInput!): Product!
   deleteProduct(productId: String!): Boolean!
